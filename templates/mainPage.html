@@ -5,6 +5,18 @@
     <title>Hello</title>
 </head>
 <body>
-       <h1>aici</h1>
+       <form action="addPers" method="post">
+           {% csrf_token %}
+           <input type="text" name="namePerson">
+           <input type="text" name="agesPerson">
+           <input type="text" name="genderPerson"><br>
+           <input type="submit">
+       </form>
+       {% for person in listPers %}
+           name={{ person.name }}
+           ages={{ person.ages }}
+           gender={{ person.gender }}
+           <br>
+       {% endfor %}
 </body>
 </html>
