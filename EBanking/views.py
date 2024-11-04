@@ -36,8 +36,8 @@ def addPers(request):
 def loginClient(request):
     mongo = MongoDBConnect()
     tabel = DataBaseTabel(mongo.get_tabel("test1", "ionut1"))
-    username = request.POST['username']
-    password = request.POST['password']
+    username = request.POST.get('username')
+    password = request.POST.get('password')
     context=LoginClient()
     user=tabel.findOneBy({"username":username})
     if user is None:
