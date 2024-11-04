@@ -5,6 +5,7 @@ from django.shortcuts import render
 from DataBase import *
 from DataBase.Connection.MongoDBConnect import MongoDBConnect
 from DataBase.DB_Data.Person import Person
+from DataBase.DB_Data.User import User
 from DataBase.DataBaseUC.TabelOperation import DataBaseTabel
 from HtmlContent.loginClient import LoginClient
 
@@ -20,13 +21,13 @@ def mainPage(request):
 
 def addPers(request):
     mongo=MongoDBConnect()
-    tabel=DataBaseTabel(mongo.get_tabel("test1","ai"))
+    tabel=DataBaseTabel(mongo.get_tabel("test1","ionut1"))
     name = request.POST['namePerson']
-    age = request.POST['agesPerson']
-    gender = request.POST['genderPerson']
-    newPerson = Person(name, age, gender)
-    # tabel.add(newPerson)
-    tabel.delete({"name":name})
+    username = request.POST['agesPerson']
+    password = request.POST['genderPerson']
+    newPerson = User(name, username, password)
+    tabel.add(newPerson)
+    # tabel.delete({"name":name})
     # tabel.update({"name":name},{"name":"12","gender":"masculin"})
     # a=tabel.findAllBy({'ages':age})
     # for i in a:
