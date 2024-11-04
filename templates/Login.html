@@ -9,22 +9,22 @@
            {% csrf_token %}
            Username:
            <input type="text" name="username"><br>
-           <div >{{ ErUserName }}</div><br>
+           <div >{{ context.ErUserName }}</div><br>
            Password:
            <input type="password" name="password"><br>
-           <div >{{ ErPassword }} </div><br>
+           <div >{{ context.ErPassword }} </div><br>
            <input type="submit">
     </form>
     <br>
     <form action="recoverPassword" method="post">
         {% csrf_token %}
-        Ai uitat parola? 
+        Ai uitat parola?
         <input type="submit">
     </form>
     <br>
     <form action="createAcount" method="post">
         {% csrf_token %}
-        Nu ai cont? 
+        Nu ai cont?
         <input type="submit">
     </form>
 </body>
