@@ -1,4 +1,5 @@
 class Person:
+    __fields__ = ['name', 'ages', 'gender']
     def __init__(self, name, ages, gender):
         self.name = name
         self.ages = ages

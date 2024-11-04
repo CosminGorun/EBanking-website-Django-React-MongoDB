@@ -1,33 +1,31 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from DataBase import *
-from DataBase.Connection.DB_Connect import connect, getTabel
+from DataBase.Connection.MongoDBConnect import MongoDBConnect
 from DataBase.DB_Data.Person import Person
-from DataBase.DataBaseUC.DB_Operation import addPerson, getAllPerson
+from DataBase.DataBaseUC.TabelOperation import DataBaseTabel
 
 
 # Create your views here.
 def mainPage(request):
-    client=connect()
-    if client==None:
-        print("Connection Error")
-    else:
-        print("Connected")
-        tabel=getTabel(client,"test1","ai")
-        listPers=getAllPerson(tabel)
-    return render(request, 'mainPage.html',{'listPers':listPers})
+    mongo=MongoDBConnect()
+    tabel=DataBaseTabel(mongo.get_tabel("test1","ai"))
+    listPers=tabel.getAll(Person)
+    a1="eroare User"
+    a2="er pass"
+    return render(request, 'Login.html',{'listPers':listPers,'ErUserName':a1,'ErPassword':a2})
 
 def addPers(request):
-    client = connect()
-    if client == None:
-        print("Connection Error")
-    else:
-        print("Connected")
-        tabel = getTabel(client, "test1", "ai")
-        name = request.POST['namePerson']
-        age = request.POST['agesPerson']
-        gender = request.POST['genderPerson']
-        newPerson = Person(name, age, gender)
-        addPerson(tabel,newPerson)
-        print("Person added")
+    mongo=MongoDBConnect()
+    tabel=DataBaseTabel(mongo.get_tabel("test1","ai"))
+    name = request.POST['namePerson']
+    age = request.POST['agesPerson']
+    gender = request.POST['genderPerson']
+    newPerson = Person(name, age, gender)
+    # tabel.add(newPerson)
+    tabel.delete({"name":name})
+    # tabel.update({"name":name},{"name":"12","gender":"masculin"})
+    # a=tabel.findAllBy({'ages':age})
+    # for i in a:
+    #     print(i['name'])
     return mainPage(request)
