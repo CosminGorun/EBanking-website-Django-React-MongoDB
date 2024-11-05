@@ -11,13 +11,13 @@ from HtmlContent.loginClient import LoginClientContext
 
 
 # Create your views here.
-def mainPage(request):
+def mainPage(request,user):
     mongo=MongoDBConnect()
     tabel=DataBaseTabel(mongo.get_tabel("test1","ai"))
     listPers=tabel.getAll(Person)
     a1="eroare User"
     a2="er pass"
-    return render(request, 'mainPage.html',{'listPers':listPers,'ErUserName':a1,'ErPassword':a2})
+    return render(request, 'mainPage.html',{'listPers':listPers,'ErUserName':a1,'ErPassword':a2,'USER' : user})
 
 def addPers(request):
     mongo=MongoDBConnect()
@@ -50,7 +50,7 @@ def loginClient(request):
         if user['password'] != password:
             context.setUserPasswordEr("eroare password")
             return render(request, 'Login.html', {'context':context})
-    return mainPage(request)
+    return mainPage(request,user)
 
 def goToCreateAccount(request):
     return render(request,'CreateAccount.html')

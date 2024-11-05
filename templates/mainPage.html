@@ -5,6 +5,8 @@
     <title>Hello</title>
 </head>
 <body>
+       <h1>Hello {{ USER.name }}</h1><br>
+
        <form action="addPers" method="post">
            {% csrf_token %}
            <input type="text" name="namePerson">
