@@ -7,7 +7,7 @@ from DataBase.Connection.MongoDBConnect import MongoDBConnect
 from DataBase.DB_Data.Person import Person
 from DataBase.DB_Data.User import User
 from DataBase.DataBaseUC.TabelOperation import DataBaseTabel
-from HtmlContent.loginClient import LoginClient
+from HtmlContent.loginClient import LoginClientContext
 
 
 # Create your views here.
@@ -34,14 +34,16 @@ def addPers(request):
     #     print(i['name'])
     return mainPage(request)
 
+def goToLoginClient(request):
+    return render(request, 'Login.html')
 def loginClient(request):
     mongo = MongoDBConnect()
     tabel = DataBaseTabel(mongo.get_tabel("DB_User", "Users"))
     username = request.POST.get('username')
     password = request.POST.get('password')
-    context=LoginClient()
+    context=LoginClientContext()
     user=tabel.findOneBy({"username":username})
-    if username!="" and user is None:
+    if user is None:
         context.setUserNameEr("eroare user")
         return render(request, 'Login.html', {'context':context})
     else:

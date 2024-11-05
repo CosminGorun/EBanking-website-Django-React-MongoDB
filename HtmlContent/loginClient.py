@@ -1,4 +1,4 @@
-class LoginClient:
+class LoginClientContext:
     def __init__(self):
         self.ErUserName=""
         self.ErPassword=""
