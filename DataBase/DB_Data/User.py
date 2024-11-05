@@ -1,9 +1,11 @@
 class User:
-    __fields__ = ['name', 'username', 'parola']
-    def __init__(self, name, username, password):
+    __fields__ = ['name', 'username', 'password','mail','phoneNumber']
+    def __init__(self, name, username, password,mail, phoneNumber):
         self.name = name
         self.username = username
-        self.parola = password
+        self.password = password
+        self.mail = mail
+        self.phoneNumber =  phoneNumber
 
     def toDic(self):
-        return {"name": self.name, "username": self.username, "parola": self.parola}
+        return {"name": self.name, "username": self.username, "password": self.password, "mail": self.mail, "phoneNumber": self.phoneNumber}

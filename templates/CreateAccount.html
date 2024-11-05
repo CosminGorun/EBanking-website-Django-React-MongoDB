@@ -5,6 +5,19 @@
     <title>Create account</title>
 </head>
 <body>
-  
+   <form action="createAccount" method="post">
+           {% csrf_token %}
+           name:
+           <input type="text" name="name"><br>
+           Username:
+           <input type="text" name="username"><br>
+           Password:
+           <input type="password" name="password"><br>
+            mail:
+           <input type="text" name="mail"><br>
+            phoneNumber:
+           <input type="text" name="phoneNumber"><br>
+           <input type="submit">
+    </form>
 </body>
 </html>

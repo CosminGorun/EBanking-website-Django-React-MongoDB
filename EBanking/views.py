@@ -36,16 +36,30 @@ def addPers(request):
 
 def loginClient(request):
     mongo = MongoDBConnect()
-    tabel = DataBaseTabel(mongo.get_tabel("test1", "ionut1"))
+    tabel = DataBaseTabel(mongo.get_tabel("DB_User", "Users"))
     username = request.POST.get('username')
     password = request.POST.get('password')
     context=LoginClient()
     user=tabel.findOneBy({"username":username})
-    if user is None:
+    if username!="" and user is None:
         context.setUserNameEr("eroare user")
         return render(request, 'Login.html', {'context':context})
     else:
-        if user['parola'] != password:
+        if user['password'] != password:
             context.setUserPasswordEr("eroare password")
             return render(request, 'Login.html', {'context':context})
     return mainPage(request)
+
+def goToCreateAccount(request):
+    return render(request,'CreateAccount.html')
+
+def createAccount(request):
+    name = request.POST.get('name')
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    mail=request.POST.get('mail')
+    phoneNumber=request.POST.get('phoneNumber')
+    mongo=MongoDBConnect()
+    tabel = DataBaseTabel(mongo.get_tabel("DB_User", "Users"))
+    tabel.add(User(name, username, password, mail, phoneNumber))
+    return render(request,'Login.html')
