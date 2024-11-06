@@ -7,7 +7,7 @@ from DataBase.Connection.MongoDBConnect import MongoDBConnect
 from DataBase.DB_Data.Person import Person
 from DataBase.DB_Data.User import User
 from DataBase.DataBaseUC.TabelOperation import DataBaseTabel
-from HtmlContent.loginClient import LoginClientContext
+from HtmlContent.ContextClass import LoginClientContext,CreateAccountContext
 
 
 # Create your views here.
@@ -44,11 +44,11 @@ def loginClient(request):
     context=LoginClientContext()
     user=tabel.findOneBy({"username":username})
     if user is None:
-        context.setUserNameEr("eroare user")
+        context.ErUserName="User-ul nu a fost gasit!"
         return render(request, 'Login.html', {'context':context})
     else:
         if user['password'] != password:
-            context.setUserPasswordEr("eroare password")
+            context.ErPassword="Parola gresita!"
             return render(request, 'Login.html', {'context':context})
     return mainPage(request,user)
 
@@ -56,12 +56,41 @@ def goToCreateAccount(request):
     return render(request,'CreateAccount.html')
 
 def createAccount(request):
-    name = request.POST.get('name')
-    username = request.POST.get('username')
-    password = request.POST.get('password')
-    mail=request.POST.get('mail')
-    phoneNumber=request.POST.get('phoneNumber')
-    mongo=MongoDBConnect()
+    context=CreateAccountContext()
+    mongo = MongoDBConnect()
     tabel = DataBaseTabel(mongo.get_tabel("DB_User", "Users"))
+
+    name = request.POST.get('name')
+    if len(name)<3:
+        context.ErName="Numele este prea scurt!"
+        return render(request, 'CreateAccount.html', {'context':context})
+    if any(c in name for c in '[]{},._;:\|!@#$%^&*()-_=+|~=:<>?'):
+        context.ErName = "Numele nu poate contine caractere speciale!"
+        return render(request, 'CreateAccount.html', {'context':context})
+
+    username = request.POST.get('username')
+    if len(username)<5:
+        context.ErUserName="Username-ul este prea scurt!"
+        return render(request, 'CreateAccount.html', {'context':context})
+    if tabel.findOneBy({"username":username}) :
+        context.ErUserName="Acest username exista!"
+        return render(request, 'CreateAccount.html', {'context':context})
+
+    password = request.POST.get('password')
+    if len(password)<8:
+        context.ErPassword="Parola trebuie sa contina minim 8 caractere!"
+        return render(request, 'CreateAccount.html', {'context':context})
+
+    mail=request.POST.get('mail')
+    # if not validEmail(mail):
+    #     context.ErEmail="Email invalid!"
+    #     return render(request, 'CreateAccount.html', {'context':context})
+
+    phoneNumber=request.POST.get('phoneNumber')
+    if len(phoneNumber)!=10:
+        context.ErPhoneNumber="numar gresit!"
+        return render(request, 'CreateAccount.html', {'context':context})
+
     tabel.add(User(name, username, password, mail, phoneNumber))
     return render(request,'Login.html')
+

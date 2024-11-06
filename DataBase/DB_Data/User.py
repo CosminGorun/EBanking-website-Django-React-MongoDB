@@ -1,5 +1,6 @@
+# datele se salveaza in baza de date DB_User in colectia Users
 class User:
-    __fields__ = ['name', 'username', 'password','mail','phoneNumber']
+    __fields__ = ['name', 'username', 'password','mail','phoneNumber','userID','IBAN']
     def __init__(self, name, username, password,mail, phoneNumber):
         self.name = name
         self.username = username

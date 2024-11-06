@@ -9,14 +9,19 @@
            {% csrf_token %}
            name:
            <input type="text" name="name"><br>
+           <div >{{ context.ErName }}</div><br>
            Username:
            <input type="text" name="username"><br>
+           <div >{{ context.ErUserName }}</div><br>
            Password:
            <input type="password" name="password"><br>
+           <div >{{ context.ErPassword }}</div><br>
             mail:
            <input type="text" name="mail"><br>
+           <div >{{ context.ErMail }}</div><br>
             phoneNumber:
            <input type="text" name="phoneNumber"><br>
+           <div >{{ context.ErPhoneNumber }}</div><br>
            <input type="submit">
     </form>
 </body>
