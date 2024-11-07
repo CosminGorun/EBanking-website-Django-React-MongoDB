@@ -5,20 +5,28 @@
     <title>Hello</title>
 </head>
 <body>
-       <h1>Hello {{ USER.name }}</h1><br>
-
-       <form action="addPers" method="post">
+       <h1>Hello {{ USER.name }} cu id {{ USER.userID }}</h1><br>
+        <p>
+            Soldul contului este {{ CONT.sold }} <br>
+            Ibanul contului este {{ CONT.iban }} <br>
+        </p>
+       <form action="transferConturi" method="post">
            {% csrf_token %}
-           <input type="text" name="namePerson">
-           <input type="text" name="agesPerson">
-           <input type="text" name="genderPerson"><br>
+           ibanDestinatie:
+           <input type="text" name="ibanDestinatie">
+           <br>
+           suma:
+           <input type="text" name="suma">
+           <input type="hidden" name="ibanSursa" value="{{ CONT.iban }}">
+           <input type="hidden" name="userID" value="{{ USER.userID }}">
+           <br>
            <input type="submit">
        </form>
-       {% for person in listPers %}
-           name={{ person.name }}
-           ages={{ person.ages }}
-           gender={{ person.gender }}
-           <br>
-       {% endfor %}
+{#       {% for person in listPers %}#}
+{#           name={{ person.name }}#}
+{#           ages={{ person.ages }}#}
+{#           gender={{ person.gender }}#}
+{#           <br>#}
+{#       {% endfor %}#}
 </body>
 </html>
