@@ -12,6 +12,7 @@ urlpatterns=[
 
      path('goToCreateAccount',viewCreateAccount.goToCreateAccount,name='goToCreateAccount'),
      path('createAccount',viewCreateAccount.createAccount,name='createAccount'),
+     path('mailVerification',viewCreateAccount.mailVerification,name='mailVerification'),
 
 
     ]

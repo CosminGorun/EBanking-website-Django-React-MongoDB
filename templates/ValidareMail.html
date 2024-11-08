@@ -6,9 +6,10 @@
 </head>
 <body>
     un mail a fost trimis la adresa de mail {{ mail }}<br>
-    <form action="mailVerification" >
+    <form action="mailVerification" method="post">
         {% csrf_token %}
-        Nu ai cont?
+        introdu codul!!
+        <input type="text" name="codVerificare">
         <input type="submit">
     </form>
 </body>

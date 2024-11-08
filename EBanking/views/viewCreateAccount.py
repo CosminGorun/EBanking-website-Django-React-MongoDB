@@ -5,8 +5,10 @@ from DataBase.Connection.MongoDBConnect import MongoDBConnect
 from DataBase.DB_Data.ContBancar import ContBancar
 from DataBase.DB_Data.User import User
 from DataBase.DataBaseUC.TabelOperation import DataBaseTabel
+from DataBase.EmailSender.Sender import EmailSender
 from HtmlContent.ContextClass import LoginClientContext,CreateAccountContext
-from random import randint
+from random import randint, random
+
 tabelaCont="ionut2"
 dbCont="test1"
 
@@ -20,6 +22,9 @@ def generareIban():
 
 def goToCreateAccount(request):
     return render(request,'CreateAccount.html')
+
+def generateCode():
+    return randint(100000,999999)
 
 def createAccount(request):
     context=CreateAccountContext()
@@ -74,6 +79,43 @@ def createAccount(request):
             nextUserId=usr.userID
     nextUserId+=1
 
-    tabel.add(User(name,age, username, password,mail,phoneNumber,nextUserId))
-    tabelCont.add(ContBancar(nextUserId,'RON',0,generareIban()))
-    return render(request,'Login.html')
+    codeVerificare=generateCode()
+    email=EmailSender()
+    string="Codul este "
+    string+=str(codeVerificare)
+    email.sendMail(mail,"cod verificare",string)
+    request.session['codeVerificare']=codeVerificare
+    request.session['password']=password
+    request.session['name']=name
+    request.session['age']=age
+    request.session['username']=username
+    request.session['mail']=mail
+    request.session['phoneNumber']=phoneNumber
+    request.session['nextUserId']=nextUserId
+    request.session['nextUserId']=nextUserId
+    request.session['generareIban']=generareIban()
+    return render(request,'ValidareMail.html', {'mail':mail})
+
+def mailVerification(request):
+    codeVer=request.session['codeVerificare']
+    cod=request.POST.get('codVerificare')
+    print(cod)
+    print(codeVer)
+    if cod==str(codeVer):
+        name=request.session['name']
+        age=request.session['age']
+        username=request.session['username']
+        mail=request.session['mail']
+        phoneNumber=request.session['phoneNumber']
+        password=request.session['password']
+        nextUserId=int(request.session['nextUserId'])
+        generareIban=request.session['generareIban']
+        newUser = User(name, age, username, password, mail, phoneNumber, nextUserId)
+        contBancar = ContBancar(nextUserId, 'RON', 0, generareIban)
+        mongo = MongoDBConnect()
+        tabel = DataBaseTabel(mongo.get_tabel("DB_User", "Users"))
+        tabel.add(newUser)
+        tabel= DataBaseTabel(mongo.get_tabel("DB_User", "conturi"))
+        tabel.add(contBancar)
+        return render(request,'Login.html')
+    return render(request,'ValidareMail.html')
