@@ -1,15 +1,17 @@
 from django.urls import path
 
-from . import views
+from EBanking.views import viewLoginClient,viewCreateAccount,viewTranzactii,viewMainPage
 
 urlpatterns=[
-    path('',views.goToLoginClient,name='goToLoginClient'),
-    path('addPers',views.addPers,name='addPers'),
+    path('',viewLoginClient.goToLoginClient,name='goToLoginClient'),
+    # path('addPers',view.addPers,name='addPers'),
 
-     path('transferConturi',views.transferConturi,name='transferConturi'),
-     path('loginClient',views.loginClient,name='loginClient'),
-     path('goToLoginClient',views.goToLoginClient,name='goToLoginClient'),
+     path('transferConturi',viewTranzactii.transferConturi,name='transferConturi'),
+     path('loginClient',viewLoginClient.loginClient,name='loginClient'),
+     path('goToLoginClient',viewLoginClient.goToLoginClient,name='goToLoginClient'),
 
-     path('goToCreateAccount',views.goToCreateAccount,name='goToCreateAccount'),
-     path('createAccount',views.createAccount,name='createAccount'),
+     path('goToCreateAccount',viewCreateAccount.goToCreateAccount,name='goToCreateAccount'),
+     path('createAccount',viewCreateAccount.createAccount,name='createAccount'),
+
+
     ]
