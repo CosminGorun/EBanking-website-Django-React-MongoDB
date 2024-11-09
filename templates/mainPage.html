@@ -22,11 +22,40 @@
            <br>
            <input type="submit">
        </form>
-{#       {% for person in listPers %}#}
-{#           name={{ person.name }}#}
-{#           ages={{ person.ages }}#}
-{#           gender={{ person.gender }}#}
-{#           <br>#}
-{#       {% endfor %}#}
+       <h3>{{ err }}</h3>>
+       <h2>Tranzactii primite</h2>
+    {% for transfer in listTransferOUT %}
+        <form action="finalizareTransfer" method="post">
+        {% csrf_token %}
+            <div>
+                IBAN primire: {{ transfer.IBANtrimite }}<br>
+                Suma: {{ transfer.sumaTransfer }} RON<br>
+                Data: {{ transfer.dataTranzactiei }}<br>
+
+                <input type="hidden" name="IDTransfer" value="{{ transfer.IDTransfer }}">
+
+                <button type="submit" name="action" value="accept">Accepta bani</button>
+
+                <button type="submit" name="action" value="reject">Respinge transferul</button>
+            </div>
+        </form>
+        <br>
+    {% endfor %}
+        <h2>Tranzactii trimise</h2>
+    {% for transfer in listTransferIN %}
+        <form action="cancelTransfer" method="post">
+        {% csrf_token %}
+            <div>
+                IBAN trimitere: {{ transfer.IBANprimeste }}<br>
+                Suma: {{ transfer.sumaTransfer }} RON<br>
+                Data: {{ transfer.dataTranzactiei }}<br>
+
+                <input type="hidden" name="IDTransfer" value="{{ transfer.IDTransfer }}">
+
+                <button type="submit">Cancel</button>
+            </div>
+        </form>
+        <br>
+    {% endfor %}
 </body>
 </html>

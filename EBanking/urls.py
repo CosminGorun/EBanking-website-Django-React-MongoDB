@@ -7,6 +7,9 @@ urlpatterns=[
     # path('addPers',view.addPers,name='addPers'),
 
      path('transferConturi',viewTranzactii.transferConturi,name='transferConturi'),
+     path('finalizareTransfer',viewTranzactii.finalizareTransfer,name='finalizareTransfer'),
+
+     path('cancelTransfer',viewTranzactii.cancelTransfer,name='cancelTransfer'),
      path('loginClient',viewLoginClient.loginClient,name='loginClient'),
      path('goToLoginClient',viewLoginClient.goToLoginClient,name='goToLoginClient'),
 
