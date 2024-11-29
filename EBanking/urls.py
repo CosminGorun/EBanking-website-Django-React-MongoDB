@@ -3,8 +3,10 @@ from django.urls import path
 from EBanking.views import viewLoginClient,viewCreateAccount,viewTranzactii,viewMainPage
 
 urlpatterns=[
-    path('',viewLoginClient.goToLoginClient,name='goToLoginClient'),
+    #path('',viewLoginClient.goToLoginClient,name='goToLoginClient'),
     # path('addPers',view.addPers,name='addPers'),
+
+    path('mainPage', viewMainPage.mainPage, name='mainPage'),
 
      path('transferConturi',viewTranzactii.transferConturi,name='transferConturi'),
      path('finalizareTransfer',viewTranzactii.finalizareTransfer,name='finalizareTransfer'),
