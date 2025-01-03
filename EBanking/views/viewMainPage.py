@@ -10,8 +10,8 @@ from django.views.decorators.csrf import csrf_exempt
 tabelaTr="ionut3"
 dbTr="test1"
 
-tabelaCont="DB_User"
-dbCont="conturi"
+tabelaCont="conturi"
+dbCont="DB_User"
 
 tabelaUser = "Users"
 dbUser = "DB_User"
@@ -27,14 +27,21 @@ def mainPage(request,context=None):
     listTr=tabelTr.getAll(Transfer)
     tranzactiiUserOUT=[]
     tranzactiiUserIN = []
-
+    conturiIBAN=[]
 
     print("Salut")
-    elemente=tabelCont.getAll(ContBancar)
-    for element in elemente:
-        print(", ".join(f"{attr}={getattr(element, attr)}" for attr in element.__dict__))
     userID = request.session.get('userID')
     cont = request.session.get('cont')
+    elemente=tabelCont.getAll(ContBancar)
+    for element in elemente:
+        print("userID"+str(element.userID))
+        print("userIDPRI=",userID)
+        if element.userID==int(userID):
+            conturiIBAN.append(element.iban)
+    print("Conturi=")
+    for contIBAN in conturiIBAN:
+        print("Cont="+contIBAN)
+
 
     user = tabelUser.findOneBy({"userID": int(userID)})
     userName=user['name']
@@ -58,7 +65,8 @@ def mainPage(request,context=None):
 
     response_data = {
         'tranzactiiUserOUT': [transaction.toDic() for transaction in tranzactiiUserOUT],  
-        'tranzactiiUserIN': [transaction.toDic() for transaction in tranzactiiUserIN],    
+        'tranzactiiUserIN': [transaction.toDic() for transaction in tranzactiiUserIN],
+        'conturiIBAN':conturiIBAN,
         'USERID': userID,
         'NAME':userName,
         'CONT': cont

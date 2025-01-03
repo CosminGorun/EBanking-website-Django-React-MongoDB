@@ -1,0 +1,153 @@
+/* Container for the account creation form */
+.accounts-container {
+  padding: 40px;
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Title Styles */
+.accounts-container h2 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.accounts-container h3 {
+  font-size: 1.5rem;
+  font-weight: normal;
+  color: #666;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Form styling */
+.accounts-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Group for form field */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Label styling */
+.form-group label {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #444;
+  margin-bottom: 0.5rem;
+}
+
+/* Styling for select field */
+.form-group .form-control {
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  background-color: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Focus highlight for select field */
+.form-group .form-control:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+  outline: none;
+}
+
+/* Form actions for submission */
+.form-actions {
+  text-align: center;
+}
+
+/* Submit button styling */
+.submit-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #4caf50;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  text-transform: uppercase;
+}
+
+/* Hover and active effects for button */
+.submit-button:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+}
+
+.submit-button:active {
+  background-color: #3a8c41;
+  transform: translateY(0);
+}
+
+/* Error Message */
+.error-message {
+  color: #d9534f;
+  font-size: 1rem;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+/* Success Message */
+.success-message {
+  color: #5cb85c;
+  font-size: 1rem;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+/* Responsive design adjustments */
+@media (max-width: 768px) {
+  .accounts-container {
+    padding: 20px;
+    border-radius: 5px;
+  }
+
+  .submit-button {
+    width: 100%;
+  }
+}
+
+/* Checkbox styling */
+.checkbox-group {
+  display: flex;
+  justify-content: center; /* Centers the checkbox and text horizontally */
+  align-items: center;    /* Centers checkbox with its text vertically */
+  margin-top: 1rem;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* Spacing between checkbox and text */
+  font-size: 1rem;
+  color: #444;
+}
+
+/* Hover effect for the checkbox area */
+.checkbox-label:hover {
+  color: #4caf50;
+  cursor: pointer;
+}
+
+/* Make checkbox larger with proper cursor */
+.checkbox-label input[type="checkbox"] {
+  transform: scale(1.2);
+  cursor: pointer;
+}

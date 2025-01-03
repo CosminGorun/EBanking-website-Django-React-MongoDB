@@ -1,34 +1,42 @@
+from locale import currency
+
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from DataBase.Connection.MongoDBConnect import MongoDBConnect
 from DataBase.DataBaseUC.TabelOperation import DataBaseTabel
 from DataBase.DB_Data.ContBancar import ContBancar
+from random import randint, random
 import json
 
 tabelaCont = "conturi"
 dbCont = "DB_User"
 
 
-@csrf_exempt
-def view_multiple_accounts(request):
-    if not request.session.get('userID'):
-        return JsonResponse({'error': 'User not logged in!'}, status=401)
+def generareIban(moneda):
+    iban = moneda
+    iban += str(randint(100, 999))
+    iban += "SIG"
+    iban += str(randint(10 ** 9, 10 ** 10 - 1))
+    return iban
 
-    user_id = int(request.session.get('userID'))  # Get logged-in user's ID from session
+@csrf_exempt
+def addAccount(request):
+    try:
+        body = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON payload'}, status=400)
+    userID = int(request.session['userID'])
+    actCurrency=body.get('currency')
+    actCurrency=actCurrency.upper()
+    print("UserID:"+str(userID))
+    print("Currency:"+str(actCurrency[:2]))
+    IBAN = generareIban(actCurrency[:2])
+    contBancar = ContBancar(userID, actCurrency, 0, IBAN)
 
     mongo = MongoDBConnect()
     tabelCont = DataBaseTabel(mongo.get_tabel(dbCont, tabelaCont))
+    tabelCont.add(contBancar)
+    print(contBancar.toDic())
 
-    # Retrieve all accounts belonging to the user
-    user_accounts = tabelCont.findAllBy({"userID": user_id})
 
-    if not user_accounts:
-        return JsonResponse({'message': "No accounts found for the user."}, status=404)
-
-    # Prepare the response with account details
-    accounts_data = [ContBancar.fromDict(account).toDic() for account in user_accounts]
-
-    return JsonResponse({
-        'message': 'Accounts retrieved successfully!',
-        'accounts': accounts_data
-    })
+    return JsonResponse({'message': 'Account successfully created.'})

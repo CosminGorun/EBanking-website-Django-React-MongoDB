@@ -16,8 +16,8 @@ tabelaCont = "conturi"
 dbCont = "DB_User"
 
 
-def generareIban():
-    iban = "RO"
+def generareIban(moneda):
+    iban = moneda
     iban += str(randint(100, 999))
     iban += "SIG"
     iban += str(randint(10 ** 9, 10 ** 10 - 1))
@@ -77,7 +77,7 @@ def createAccount(request):
     request.session['phoneNumber'] = phoneNumber
     request.session['nextUserId'] = nextUserId
     request.session['nextUserId'] = nextUserId
-    request.session['generareIban'] = generareIban()
+    request.session['generareIban'] = generareIban("RO")
 
     return JsonResponse({
         'message': 'Account created successfully. Please check your email for verification code.'
@@ -105,7 +105,7 @@ def mailVerification(request):
         nextUserId = int(request.session['nextUserId'])
         generareIban = request.session['generareIban']
         newUser = User(name, age, username, password, mail, phoneNumber, nextUserId)
-        contBancar = ContBancar(nextUserId, 'RON', 0, generareIban)
+        contBancar = ContBancar(nextUserId, 'RON', 1000, generareIban)
         mongo = MongoDBConnect()
         tabel = DataBaseTabel(mongo.get_tabel("DB_User", "Users"))
         tabel.add(newUser)
