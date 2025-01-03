@@ -9,8 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import json
 
-tabelaCont="ionut2"
-dbCont="test1"
+tabelaCont="DB_User"
+dbCont="conturi"
 
 
 @csrf_exempt
@@ -35,7 +35,6 @@ def transferConturi(request):
     tabelTr=DataBaseTabel(mongo.get_tabel(dbTr,tabelaTr))
 
     err=""
-
     user=tabel.findOneBy({"userID":int(userID)})
     cont=tabelCont.findOneBy({"iban":ibanSursa})
 

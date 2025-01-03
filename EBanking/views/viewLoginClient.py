@@ -1,6 +1,7 @@
 from django.middleware.csrf import get_token
 from django.http import JsonResponse
 from django.shortcuts import render
+from DataBase.DB_Data import ContBancar
 from DataBase.Connection.MongoDBConnect import MongoDBConnect
 from DataBase.DataBaseUC.TabelOperation import DataBaseTabel
 from EBanking.views.viewMainPage import mainPage
@@ -9,8 +10,8 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-tabelaCont="ionut2"
-dbCont="test1"
+tabelaCont="conturi"
+dbCont="DB_User"
 def goToLoginClient(request):
     return render(request, 'Login.html')
 
@@ -40,6 +41,7 @@ def loginClient(request):
             return JsonResponse({'error': context.ErPassword}, status=400)
     cont = tabelCont.findOneBy({"userID": user['userID']}) # daca s-a validat user-ul inseamna ca are si userId :D asa ca nu verific nimic
 
+
     user['userID'] = str(user['userID'])
     if cont:
         cont['_id'] = str(cont['_id'])  
@@ -48,7 +50,8 @@ def loginClient(request):
     request.session['cont'] = cont  
 
     print("Stored in session:", request.session['userID'], request.session['cont'])
-
+    print("Username="+ user['username'])
+    print("userID"+user['userID'])
     response_data = {
         'username': user['username'],
         'userID': user['userID'],

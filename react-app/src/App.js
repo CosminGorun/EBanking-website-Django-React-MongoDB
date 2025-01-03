@@ -5,6 +5,7 @@ import SignUp from './components/SignUp/SignUp';
 import EmailVerification from './components/ValidareMail/ValidareMail';
 import './App.css';
 import MainPage from './components/HomePage/mainPage';
+import MultipleAccounts from './components/CreateIban/MultipleAccounts';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -32,6 +33,7 @@ function App() {
         <Route path="/mainPage" element={<MainPage/>} />
         <Route path="/signUp" element={<SignUp/>}/> 
         <Route path="/mailVerification" element={<EmailVerification/>}/>
+         <Route path="/viewMultipleAccounts" element={<MultipleAccounts/>}/>
       </Routes>
   );
 }

@@ -12,22 +12,26 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import JsonResponse
 
-tabelaCont="ionut2"
-dbCont="test1"
+tabelaCont = "conturi"
+dbCont = "DB_User"
+
 
 def generareIban():
-    iban="RO"
-    iban+=str(randint(100,999))
-    iban+="SIM"
-    iban+=str(randint(10**9,10**10-1))
+    iban = "RO"
+    iban += str(randint(100, 999))
+    iban += "SIG"
+    iban += str(randint(10 ** 9, 10 ** 10 - 1))
     return iban
+
 
 @csrf_exempt
 def goToCreateAccount(request):
-    return render(request,'CreateAccount.html')
+    return render(request, 'CreateAccount.html')
+
 
 def generateCode():
-    return randint(100000,999999)
+    return randint(100000, 999999)
+
 
 @csrf_exempt
 def createAccount(request):
@@ -43,40 +47,42 @@ def createAccount(request):
     except json.JSONDecodeError:
         return JsonResponse({'error': 'Invalid JSON payload'}, status=400)
 
-    context=CreateAccountContext()
+    context = CreateAccountContext()
     mongo = MongoDBConnect()
     tabel = DataBaseTabel(mongo.get_tabel("DB_User", "Users"))
-    tabelCont=DataBaseTabel(mongo.get_tabel(dbCont,tabelaCont))
-    listUser=tabel.getAll(User)
+    tabelCont = DataBaseTabel(mongo.get_tabel(dbCont, tabelaCont))
+    listUser = tabel.getAll(User)
 
     # for i in listUser:
     #     tabel.deleteOne({"username":i.username})
     # return
-    nextUserId=0
+    nextUserId = 0
     for usr in listUser:
-        if usr.userID>nextUserId:
-            nextUserId=usr.userID
-    nextUserId+=1
+        if usr.userID > nextUserId:
+            nextUserId = usr.userID
+    nextUserId += 1
 
-    codeVerificare=generateCode()
-    email=EmailSender()
-    string="Codul este "
-    string+=str(codeVerificare)
-    email.sendMail(mail,"cod verificare",string)
-    request.session['codeVerificare']=codeVerificare
-    request.session['password']=password
-    request.session['name']=name
-    request.session['age']=age
-    request.session['username']=username
-    request.session['mail']=mail
-    request.session['phoneNumber']=phoneNumber
-    request.session['nextUserId']=nextUserId
-    request.session['nextUserId']=nextUserId
-    request.session['generareIban']=generareIban()
-    
+    codeVerificare = generateCode()
+    email = EmailSender()
+    string = "Codul este "
+    string += str(codeVerificare)
+    email.sendMail(mail, "cod verificare", string)
+    print(codeVerificare)
+    request.session['codeVerificare'] = codeVerificare
+    request.session['password'] = password
+    request.session['name'] = name
+    request.session['age'] = age
+    request.session['username'] = username
+    request.session['mail'] = mail
+    request.session['phoneNumber'] = phoneNumber
+    request.session['nextUserId'] = nextUserId
+    request.session['nextUserId'] = nextUserId
+    request.session['generareIban'] = generareIban()
+
     return JsonResponse({
         'message': 'Account created successfully. Please check your email for verification code.'
     })
+
 
 @csrf_exempt
 def mailVerification(request):
@@ -86,28 +92,28 @@ def mailVerification(request):
     except json.JSONDecodeError:
         return JsonResponse({'error': 'Invalid JSON payload'}, status=400)
 
-    codeVer=request.session['codeVerificare']
+    codeVer = request.session['codeVerificare']
     print(cod)
     print(codeVer)
-    if cod==str(codeVer):
-        name=request.session['name']
-        age=request.session['age']
-        username=request.session['username']
-        mail=request.session['mail']
-        phoneNumber=request.session['phoneNumber']
-        password=request.session['password']
-        nextUserId=int(request.session['nextUserId'])
-        generareIban=request.session['generareIban']
+    if cod == str(codeVer):
+        name = request.session['name']
+        age = request.session['age']
+        username = request.session['username']
+        mail = request.session['mail']
+        phoneNumber = request.session['phoneNumber']
+        password = request.session['password']
+        nextUserId = int(request.session['nextUserId'])
+        generareIban = request.session['generareIban']
         newUser = User(name, age, username, password, mail, phoneNumber, nextUserId)
         contBancar = ContBancar(nextUserId, 'RON', 0, generareIban)
         mongo = MongoDBConnect()
         tabel = DataBaseTabel(mongo.get_tabel("DB_User", "Users"))
         tabel.add(newUser)
-        tabel= DataBaseTabel(mongo.get_tabel("DB_User", "conturi"))
+        tabel = DataBaseTabel(mongo.get_tabel("DB_User", "conturi"))
         tabel.add(contBancar)
 
         request.session['userID'] = str(newUser.userID)
-        request.session['cont'] = contBancar.toDic()  
+        request.session['cont'] = contBancar.toDic()
 
         return JsonResponse({'message': 'User successfully created. You can now log in.'})
     return JsonResponse({'error': 'Invalid verification code'}, status=400)

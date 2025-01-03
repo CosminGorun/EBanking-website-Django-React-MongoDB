@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import axiosInstance from '../axiosInstance';
+import { useNavigate } from "react-router-dom";
 
 function EBanking() {
   const [tranzactiiUserOUT, setTranzactiiUserOUT] = useState([]);
   const [tranzactiiUserIN, setTranzactiiUserIN] = useState([]);
   const [userID, setUserID] = useState('');
+  const [userName, setUserName] = useState([]);
   const [cont, setCont] = useState({});
   const [sold, setSold] = useState('')
   const [error, setError] = useState(null);
@@ -15,10 +17,10 @@ function EBanking() {
   const [suma, setSuma] = useState('');
   const [IDTransfer, setIDTransfer] = useState('');
   const [action, setAction] = useState('');
-
+ const navigate = useNavigate();
   useEffect(() => {
     fetchTransactions();
-  }, []);  
+  }, []);
 
   const fetchTransactions = async () => {
     axiosInstance.get('/mainPage')
@@ -26,6 +28,7 @@ function EBanking() {
         setTranzactiiUserOUT(response.data.tranzactiiUserOUT);
         setTranzactiiUserIN(response.data.tranzactiiUserIN);
         setUserID(response.data.USERID);
+        setUserName(response.data.NAME);
         setCont(response.data.CONT);
         setSold(cont.sold)
         if (response.data.CONT && response.data.CONT.iban) {
@@ -37,7 +40,7 @@ function EBanking() {
         console.error(err);
       });
   };
-  
+
 
   const handleTransfer = async (e) => {
     e.preventDefault();
@@ -56,7 +59,7 @@ function EBanking() {
       setSuccessMessage(null);
     }
   };
-  
+
   const handleTransferAction = async (e, IDTransfer, action) => {
     e.preventDefault();
     try{
@@ -95,12 +98,11 @@ function EBanking() {
         setSuccessMessage(null);
       };
   };
-
   return (
     <div className="container">
       {/* User Info Section */}
       <div className="user-info">
-        <h2>Hello {userID} cu id {userID}</h2>
+        <h2>Hello {userName} cu id {userID}</h2>
         <p>Soldul contului este {cont.sold}</p>
         <p>Ibanul contului este {cont.iban}</p>
       </div>
@@ -139,19 +141,23 @@ function EBanking() {
         {tranzactiiUserIN.length > 0 ? (
           tranzactiiUserIN.map((transaction, index) => (
             <form key={index} action="cancelTransfer" method="post">
-              <div>
-                <p>IBAN trimitere: {transaction.IBANprimeste}</p>
-                <p>Suma: {transaction.sumaTransfer} RON</p>
-                <p>Data: {transaction.dataTranzactiei}</p>
-                <input type="hidden" name="IDTransfer" value={transaction.IDTransfer} />
-                <button onClick={(e) => handleCancelTransfer(e, transaction.IDTransfer)} type="submit">Cancel</button>
-              </div>
+                <div>
+                    <p>IBAN trimitere: {transaction.IBANprimeste}</p>
+                    <p>Suma: {transaction.sumaTransfer} RON</p>
+                    <p>Data: {transaction.dataTranzactiei}</p>
+                    <input type="hidden" name="IDTransfer" value={transaction.IDTransfer}/>
+                    <button onClick={(e) => handleCancelTransfer(e, transaction.IDTransfer)} type="submit">Cancel
+                    </button>
+                </div>
             </form>
           ))
         ) : (
-          <p>No outgoing transactions.</p>
+            <p>No outgoing transactions.</p>
         )}
       </div>
+        <p className="mltipleacc-bottom-p">
+            Vrei inca un cont? <a href="#" onClick={() => navigate('/viewMultipleAccounts')}>Creeaza</a>
+        </p>
     </div>
   );
 }
