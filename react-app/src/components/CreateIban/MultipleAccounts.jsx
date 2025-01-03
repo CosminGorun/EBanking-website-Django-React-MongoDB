@@ -22,7 +22,6 @@ const MultipleAccounts = () => {
 
         fetchAccounts();
     }, []);
-
     return (
         <div className="accounts-container">
             <h1>Welcome to Multiple Accounts</h1>
