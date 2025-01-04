@@ -28,7 +28,8 @@ def mainPage(request,context=None):
     tranzactiiUserOUT=[]
     tranzactiiUserIN = []
     conturiIBAN=[]
-
+    transferuriAcceptate=[]
+    transferuriRejectate=[]
     print("Salut")
     userID = request.session.get('userID')
     cont = request.session.get('cont')
@@ -51,10 +52,16 @@ def mainPage(request,context=None):
         return JsonResponse({'error': 'User or account data missing from session.'}, status=400)
 
     for tranzactie in listTr:
-        if tranzactie.IBANprimeste==cont["iban"] and tranzactie.finalizat==0:
-            tranzactiiUserOUT.append(tranzactie)
-        if tranzactie.IBANtrimite==cont["iban"] and tranzactie.finalizat==0:
-            tranzactiiUserIN.append(tranzactie)
+        if tranzactie.IBANprimeste == cont["iban"]:
+            if tranzactie.finalizat == 0:
+                tranzactiiUserOUT.append(tranzactie)
+            else:
+                transferuriAcceptate.append(tranzactie)
+        if tranzactie.IBANtrimite == cont["iban"] :
+            if tranzactie.finalizat == 0:
+                tranzactiiUserIN.append(tranzactie)
+            else:
+                transferuriRejectate.append(tranzactie)
 
     #print("tranzactii in\n")
     #print(tranzactiiUserIN)
@@ -66,10 +73,13 @@ def mainPage(request,context=None):
     response_data = {
         'tranzactiiUserOUT': [transaction.toDic() for transaction in tranzactiiUserOUT],  
         'tranzactiiUserIN': [transaction.toDic() for transaction in tranzactiiUserIN],
+        'transferuriAcceptate': [transaction.toDic() for transaction in transferuriAcceptate],
+        'transferuriRejectate': [transaction.toDic() for transaction in transferuriRejectate],
         'conturiIBAN':conturiIBAN,
         'USERID': userID,
         'NAME':userName,
-        'CONT': cont
+        'CONT': cont,
+        'MONEDA': cont['moneda']
     }
 
     return JsonResponse(response_data)

@@ -6,12 +6,15 @@ import { useNavigate } from "react-router-dom";
 function EBanking() {
   const [tranzactiiUserOUT, setTranzactiiUserOUT] = useState([]);
   const [tranzactiiUserIN, setTranzactiiUserIN] = useState([]);
+  const [transferuriAcceptate, settransferuriAcceptate] = useState([]);
+  const [transferuriRejectate, settransferuriRejectate] = useState([]);
   const [conturiIBAN, setConturiIBAN] = useState([]);
   const [contIBAN, setContIBAN] = useState('');
   const [userID, setUserID] = useState('');
   const [userName, setUserName] = useState([]);
   const [cont, setCont] = useState({});
   const [sold, setSold] = useState('')
+  const [moneda, setMoneda] = useState('')
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [ibanSursa, setIbanSursa] = useState('');
@@ -32,11 +35,12 @@ function EBanking() {
         setConturiIBAN(response.data.conturiIBAN)
         setUserID(response.data.USERID);
         setUserName(response.data.NAME);
+        setMoneda(response.data.MONEDA);
         setCont(response.data.CONT);
         setSold(cont.sold)
-        if (response.data.CONT && response.data.CONT.iban) {
-          setIbanSursa(response.data.CONT.iban);
-        }
+        setIbanSursa(response.data.CONT.iban);
+        settransferuriAcceptate(response.data.transferuriAcceptate)
+        settransferuriRejectate(response.data.transferuriRejectate)
         if (response.data.conturiIBAN && response.data.conturiIBAN.length > 0) {
         // setContIBAN(response.data.conturiIBAN[0]);
         }
@@ -66,6 +70,8 @@ function EBanking() {
     }
   };
 
+
+
   const handleTransferAction = async (e, IDTransfer, action) => {
     e.preventDefault();
     try{
@@ -78,6 +84,26 @@ function EBanking() {
         setError(null);
         fetchTransactions();
         setSold(cont.sold)
+        //console.log("soldul este", cont.sold);
+        //fetchAccountData();
+      })
+    } catch(err) {
+        setError(err.response?.data?.error || 'Error processing transfer action');
+        setSuccessMessage(null);
+      };
+  };
+
+  const handlegetTransfer = async (e) => {
+    e.preventDefault();
+    try{
+    axiosInstance.post('/getTransferuri', {
+      contIBAN
+    })
+      .then(response => {
+        setSuccessMessage(response.data.message);
+        setError(null);
+        settransferuriAcceptate(response.data.transferuriAcceptate)
+        settransferuriRejectate(response.data.transferuriRejectate)
         //console.log("soldul este", cont.sold);
         //fetchAccountData();
       })
@@ -115,6 +141,7 @@ function EBanking() {
 };
   const fetchAccountData = async (e) => {
                       setContIBAN(e.target.value);
+                      setIbanSursa(e.target.value);
                       // Make API call to change the account based on selected IBAN
                       try {
                           const response = await axiosInstance.get('/gaseste_cont', {
@@ -127,6 +154,9 @@ function EBanking() {
         setUserName(response.data.NAME);
         setCont(response.data.CONT);
         setSold(cont.sold)
+        settransferuriAcceptate(response.data.transferuriAcceptate)
+        settransferuriRejectate(response.data.transferuriRejectate)
+        setMoneda(response.data.MONEDA);
         //console.log("soldul este", cont.sold);
         //fetchAccountData();
       })
@@ -143,7 +173,7 @@ function EBanking() {
           {/* User Info Section */}
           <div className="user-info">
               <h2>Hello {userName} cu id {userID}</h2>
-              <p>Soldul contului este {cont.sold}</p>
+              <p>Soldul contului este {cont.sold} {moneda}</p>
               <p>Ibanul contului este {cont.iban}</p>
           </div>
           <div className="iban-dropdown">
@@ -182,7 +212,7 @@ function EBanking() {
                       <form key={index} action="finalizareTransfer" method="post">
                           <div>
                               <p>IBAN primire: {transaction.IBANtrimite}</p>
-                              <p>Suma: {transaction.sumaTransfer} RON</p>
+                              <p>Suma: {transaction.sumaTransfer} {transaction.moneda}</p>
                               <p>Data: {transaction.dataTranzactiei}</p>
                               <input type="hidden" name="IDTransfer" value={transaction.IDTransfer}/>
                               <button onClick={(e) => handleTransferAction(e, transaction.IDTransfer, 'accept')}
@@ -217,6 +247,63 @@ function EBanking() {
               ) : (
                   <p>No outgoing transactions.</p>
               )}
+          </div>
+          <div>
+              <h2>Received Transfers</h2>
+              <table border="1" style={{width: "100%", textAlign: "left"}}>
+                  <thead>
+                  <tr>
+                      <th>ID Transfer</th>
+                      <th>Source IBAN</th>
+                      <th>Destination IBAN</th>
+                      <th>Amount</th>
+                      <th>Currency</th>
+                      <th>Transaction Date</th>
+                      <th>Status</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {transferuriAcceptate.map((transfer, index) => (
+                      <tr key={index}>
+                          <td>{transfer.IDTransfer}</td>
+                          <td>{transfer.IBANtrimite}</td>
+                          <td>{transfer.IBANprimeste}</td>
+                          <td>{transfer.sumaTransfer}</td>
+                          <td>{transfer.moneda}</td>
+                          <td>{transfer.dataTranzactiei}</td>
+                          <td>{transfer.finalizat==1 ? "Finalised" : "Canceled"}</td>
+                      </tr>
+                  ))}
+                  </tbody>
+              </table>
+
+              <h2>Sent Transfers</h2>
+              <table border="1" style={{width: "100%", textAlign: "left"}}>
+                  <thead>
+                  <tr>
+                      <th>ID Transfer</th>
+                      <th>Source IBAN</th>
+                      <th>Destination IBAN</th>
+                      <th>Amount</th>
+                      <th>Currency</th>
+                      <th>Transaction Date</th>
+                      <th>Status</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {transferuriRejectate.map((transfer, index) => (
+                      <tr key={index}>
+                          <td>{transfer.IDTransfer}</td>
+                          <td>{transfer.IBANtrimite}</td>
+                          <td>{transfer.IBANprimeste}</td>
+                          <td>{transfer.sumaTransfer}</td>
+                          <td>{transfer.moneda}</td>
+                          <td>{transfer.dataTranzactiei}</td>
+                          <td>{transfer.finalizat == 1 ? "Finalised" : "Canceled"}</td>
+                      </tr>
+                  ))}
+                  </tbody>
+              </table>
           </div>
           <p className="mltipleacc-bottom-p">
               Vrei inca un cont? <a href="#" onClick={handleCreateAcc}>Creeaza</a>

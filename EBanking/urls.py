@@ -13,7 +13,9 @@ urlpatterns=[
 
      path('cancelTransfer',viewTranzactii.cancelTransfer,name='cancelTransfer'),
 
-    path('gaseste_cont',viewTranzactii.gaseste_cont,name='gaseste_cont'),
+     path('gaseste_cont',viewTranzactii.gaseste_cont,name='gaseste_cont'),
+
+     path('getTransferuri',viewTranzactii.getTransferuri,name='getTransferuri'),
      path('loginClient',viewLoginClient.loginClient,name='loginClient'),
      path('goToLoginClient',viewLoginClient.goToLoginClient,name='goToLoginClient'),
 

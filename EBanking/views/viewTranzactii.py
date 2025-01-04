@@ -73,6 +73,8 @@ def transferConturi(request):
         if transfer.IBANtrimite==ibanSursa and transfer.finalizat==0:
             transfTotal+=float(transfer.sumaTransfer)
     if contDest==cont:
+        print(contDest)
+        print(cont)
         return JsonResponse({'error': 'Contul destinatie nu poate sa fie contul sursa!'}, status=400)
     if contDest is None:
         return JsonResponse({'error': 'Contul destinatie nu exista!'}, status=400)
@@ -226,6 +228,8 @@ def gaseste_cont(request):
         cont['_id'] = str(cont['_id'])
     tranzactiiUserOUT=[]
     tranzactiiUserIN = []
+    transferuriAcceptate=[]
+    transferuriRejectate=[]
     conturiIBAN=[]
     # request.session['cont'] = cont
     # request.session.modified = True
@@ -233,16 +237,48 @@ def gaseste_cont(request):
     user = tabelUser.findOneBy({"userID": int(cont['userID'])})
     userName = user['name']
     for tranzactie in listTr:
-        if tranzactie.IBANprimeste == cont["iban"] and tranzactie.finalizat == 0:
-            tranzactiiUserOUT.append(tranzactie)
-        if tranzactie.IBANtrimite == cont["iban"] and tranzactie.finalizat == 0:
-            tranzactiiUserIN.append(tranzactie)
+        if tranzactie.IBANprimeste == cont["iban"]:
+            if tranzactie.finalizat == 0:
+                tranzactiiUserOUT.append(tranzactie)
+            else:
+                transferuriAcceptate.append(tranzactie)
+
+        if tranzactie.IBANtrimite == cont["iban"] :
+            if tranzactie.finalizat == 0:
+                tranzactiiUserIN.append(tranzactie)
+            else:
+                transferuriRejectate.append(tranzactie)
         # print([transaction.toDic() for transaction in tranzactiiUserIN])
+
     response_data = {
         'tranzactiiUserOUT': [transaction.toDic() for transaction in tranzactiiUserOUT],
         'tranzactiiUserIN': [transaction.toDic() for transaction in tranzactiiUserIN],
+        'transferuriAcceptate': [transaction.toDic() for transaction in transferuriAcceptate],
+        'transferuriRejectate': [transaction.toDic() for transaction in transferuriRejectate],
         'USERID': cont['userID'],
         'NAME': userName,
-        'CONT': cont
+        'CONT': cont,
+        'MONEDA': cont['moneda']
+    }
+    return JsonResponse(response_data)
+
+def getTransferuri(request):
+    ibanCont = request.GET.get('contIBAN')
+    mongo = MongoDBConnect()
+    tabelTr = DataBaseTabel(mongo.get_tabel(dbTr, tabelaTr))
+    listTr = tabelTr.getAll(Transfer)
+    transferuriPrimite = []
+    transferuriTrimise = []
+    for tranzactie in listTr:
+        if tranzactie.IBANprimeste == ibanCont:
+            if tranzactie.finalizat != 0:
+                transferuriPrimite.append(tranzactie)
+
+        if tranzactie.IBANtrimite == ibanCont :
+            if tranzactie.finalizat != 0:
+                transferuriTrimise.append(tranzactie)
+    response_data = {
+        'transferuriAcceptate': [transaction.toDic() for transaction in transferuriPrimite],
+        'transferuriRejectate': [transaction.toDic() for transaction in transferuriTrimise]
     }
     return JsonResponse(response_data)

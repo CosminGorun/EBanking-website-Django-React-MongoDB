@@ -105,7 +105,7 @@ def mailVerification(request):
         nextUserId = int(request.session['nextUserId'])
         generareIban = request.session['generareIban']
         newUser = User(name, age, username, password, mail, phoneNumber, nextUserId)
-        contBancar = ContBancar(nextUserId, 'RON', 1000, generareIban)
+        contBancar = ContBancar(nextUserId, 'RON', 0, generareIban)
         mongo = MongoDBConnect()
         tabel = DataBaseTabel(mongo.get_tabel("DB_User", "Users"))
         tabel.add(newUser)

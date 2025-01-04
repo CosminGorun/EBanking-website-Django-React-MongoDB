@@ -47,8 +47,7 @@ def loginClient(request):
         cont['_id'] = str(cont['_id'])  
 
     request.session['userID'] = str(user['userID'])
-    request.session['cont'] = cont  
-
+    request.session['cont'] = cont
     print("Stored in session:", request.session['userID'], request.session['cont'])
     print("Username="+ user['username'])
     print("userID"+user['userID'])
