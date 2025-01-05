@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import axiosInstance from '../axiosInstance';
 import { useNavigate } from "react-router-dom";
+import './mainPage.css'
 
 function EBanking() {
   const [tranzactiiUserOUT, setTranzactiiUserOUT] = useState([]);
@@ -71,6 +72,9 @@ function EBanking() {
   };
 
 
+  const formatMoneda = (monedaValue) => {
+    return (Math.round(monedaValue * 100) / 100).toFixed(2);
+  };
 
   const handleTransferAction = async (e, IDTransfer, action) => {
     e.preventDefault();
@@ -173,7 +177,7 @@ function EBanking() {
           {/* User Info Section */}
           <div className="user-info">
               <h2>Hello {userName} cu id {userID}</h2>
-              <p>Soldul contului este {cont.sold} {moneda}</p>
+              <p>Soldul contului este {formatMoneda(cont.sold)} {moneda}</p>
               <p>Ibanul contului este {cont.iban}</p>
           </div>
           <div className="iban-dropdown">
@@ -250,7 +254,7 @@ function EBanking() {
           </div>
           <div>
               <h2>Received Transfers</h2>
-              <table border="1" style={{width: "100%", textAlign: "left"}}>
+              <table className="styled-table">
                   <thead>
                   <tr>
                       <th>ID Transfer</th>
@@ -268,7 +272,7 @@ function EBanking() {
                           <td>{transfer.IDTransfer}</td>
                           <td>{transfer.IBANtrimite}</td>
                           <td>{transfer.IBANprimeste}</td>
-                          <td>{transfer.sumaTransfer}</td>
+                          <td>{formatMoneda(transfer.sumaTransfer)}</td>
                           <td>{transfer.moneda}</td>
                           <td>{transfer.dataTranzactiei}</td>
                           <td>{transfer.finalizat==1 ? "Finalised" : "Canceled"}</td>
@@ -278,7 +282,7 @@ function EBanking() {
               </table>
 
               <h2>Sent Transfers</h2>
-              <table border="1" style={{width: "100%", textAlign: "left"}}>
+              <table className="styled-table">
                   <thead>
                   <tr>
                       <th>ID Transfer</th>
@@ -296,7 +300,7 @@ function EBanking() {
                           <td>{transfer.IDTransfer}</td>
                           <td>{transfer.IBANtrimite}</td>
                           <td>{transfer.IBANprimeste}</td>
-                          <td>{transfer.sumaTransfer}</td>
+                          <td>{formatMoneda(transfer.sumaTransfer)}</td>
                           <td>{transfer.moneda}</td>
                           <td>{transfer.dataTranzactiei}</td>
                           <td>{transfer.finalizat == 1 ? "Finalised" : "Canceled"}</td>
