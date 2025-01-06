@@ -176,7 +176,7 @@ function EBanking() {
       <div className="container">
           {/* User Info Section */}
           <div className="user-info">
-              <h2>Hello {userName} cu id {userID}</h2>
+              <h2>Hello {userName}</h2>
               <p>Soldul contului este {formatMoneda(cont.sold)} {moneda}</p>
               <p>Ibanul contului este {cont.iban}</p>
           </div>
@@ -310,7 +310,10 @@ function EBanking() {
               </table>
           </div>
           <p className="mltipleacc-bottom-p">
-              Vrei inca un cont? <a href="#" onClick={handleCreateAcc}>Creeaza</a>
+              Create another Account? <a href="#" onClick={handleCreateAcc}>Creeaza</a>
+          </p>
+          <p className="mltipleacc-bottom-p">
+              Log Out? <a href="#" onClick={() => navigate('/login')}>Log Out</a>
           </p>
       </div>
   );

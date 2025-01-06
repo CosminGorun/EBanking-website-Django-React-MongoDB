@@ -6,6 +6,9 @@ import EmailVerification from './components/ValidareMail/ValidareMail';
 import './App.css';
 import MainPage from './components/HomePage/mainPage';
 import MultipleAccounts from './components/CreateIban/MultipleAccounts';
+import RecoverPassword from './components/RecoverPassw/RecoverPassword';
+import VMailPassw from './components/ValidareMailPassword/ValidareMailPass';
+import ChangePassword from './components/ChangePassword/ChangePassword';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -33,7 +36,10 @@ function App() {
         <Route path="/mainPage" element={<MainPage/>} />
         <Route path="/signUp" element={<SignUp/>}/> 
         <Route path="/mailVerification" element={<EmailVerification/>}/>
-         <Route path="/viewMultipleAccounts" element={<MultipleAccounts/>}/>
+        <Route path="/viewMultipleAccounts" element={<MultipleAccounts/>}/>
+        <Route path="/recoverPassword" element={<RecoverPassword/>}/>
+        <Route path="/mailVerificationPassw" element={<VMailPassw/>}/>
+        <Route path="/changePassword" element={<ChangePassword/>}/>
       </Routes>
   );
 }

@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
-import axios from "axios";
-import CSRFToken from '../CSRFToken';
 import { useNavigate } from "react-router-dom";
 import axiosInstance from '../axiosInstance';
 
@@ -59,7 +57,7 @@ const Login = () => {
 
               <div className="login-center-options">
                 <a href="#" className="forgot-pass-link">
-                  Forgot password?
+                  <a href="#" onClick={() => navigate('/recoverPassword')}>Forgot Password?</a>
                 </a>
               </div>
               <div className="login-center-buttons">

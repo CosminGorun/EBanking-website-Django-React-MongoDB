@@ -21,14 +21,12 @@
     margin: 0 auto;
   }
 
-  /* Header */
   h1 {
     font-size: 2.5rem;
     color: #2c3e50;
     margin-bottom: 20px;
   }
 
-  /* User Info Section */
   .user-info {
     background-color: #fff;
     padding: 20px;
@@ -48,7 +46,6 @@
     color: #16a085;
   }
 
-  /* Form Styling */
   form {
     background-color: #fff;
     padding: 20px;
@@ -76,7 +73,6 @@
     background-color: #1abc9c;
   }
 
-  /* Error message */
   .error-message {
     color: #e74c3c;
     background-color: #f8d7da;
@@ -85,7 +81,6 @@
     margin-bottom: 20px;
   }
 
-  /* Transactions Section */
   .transactions {
     background-color: #fff;
     padding: 20px;
@@ -131,7 +126,6 @@
     cursor: not-allowed;
   }
 
-  /* Mobile Responsiveness */
   @media (max-width: 768px) {
     .container {
       width: 95%;

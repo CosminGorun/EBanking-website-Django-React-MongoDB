@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './EmVerification.css';
+import '../ValidareMail/EmVerification.css';
 import { useNavigate } from "react-router-dom";
 
-const EmailVerification = ({ mail }) => {
+const EmailVerificationPassw = ({ mail }) => {
   const [codVerificare, setcodVerificare] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -17,7 +17,7 @@ const EmailVerification = ({ mail }) => {
         setSuccess('Verification successful!');
         setError('');
         localStorage.setItem('autentificat', 1);
-        navigate('/changePassword');
+        navigate('/');
     } 
      catch (error) {
       setError('An error occurred. Please try again.');
@@ -51,4 +51,4 @@ const EmailVerification = ({ mail }) => {
   );
 };
 
-export default EmailVerification;
+export default EmailVerificationPassw;
