@@ -12,12 +12,12 @@ const ForgotPassword = () => {
       const response = await axiosInstance.post('/forgotPassword', { username });
       console.log("Forgot password request sent successfully:", response.data);
       setError('');
-      navigate('/mailVerification');
+      navigate('/mailVerificationPassw');
     } catch (err) {
       if (err.response && err.response.data && err.response.data.message) {
         setError(err.response.data.message);
       } else {
-        setError("An error occurred. Please try again.");
+        setError("Username not found. Please try again.");
       }
     }
   };
@@ -35,7 +35,7 @@ const ForgotPassword = () => {
               value={username}
               onChange={(e) => setUserName(e.target.value)}
             />
-
+            {error && <p className="error-message">{error}</p>}
             <div className="login-center-buttons">
               <button type="button" onClick={handleForgotPassword}>Submit</button>
             </div>

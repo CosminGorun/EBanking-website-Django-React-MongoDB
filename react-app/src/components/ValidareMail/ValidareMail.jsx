@@ -17,10 +17,10 @@ const EmailVerification = ({ mail }) => {
         setSuccess('Verification successful!');
         setError('');
         localStorage.setItem('autentificat', 1);
-        navigate('/changePassword');
+        navigate('/login');
     } 
      catch (error) {
-      setError('An error occurred. Please try again.');
+      setError('The code is incorrect. Please try again.');
     }
   };
 

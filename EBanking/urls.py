@@ -1,6 +1,7 @@
 from django.urls import path
 
-from EBanking.views import viewLoginClient,viewCreateAccount,viewTranzactii,viewMainPage,viewMultipleAccounts
+from EBanking.views import viewLoginClient, viewCreateAccount, viewTranzactii, viewMainPage, viewMultipleAccounts, \
+ viewRecoverPassword
 
 urlpatterns=[
     #path('',viewLoginClient.goToLoginClient,name='goToLoginClient'),
@@ -23,7 +24,11 @@ urlpatterns=[
      path('createAccount',viewCreateAccount.createAccount,name='createAccount'),
      path('mailVerification',viewCreateAccount.mailVerification,name='mailVerification'),
 
+
      path('addAccount', viewMultipleAccounts.addAccount, name='addAccount'),
+     path('forgotPassword', viewRecoverPassword.forgotPassword, name='forgotPassword'),
+     path('mailVerificationPass', viewRecoverPassword.mailVerificationPass, name='mailVerificationPass'),
+     path('changePassword', viewRecoverPassword.changePassword, name='changePassword'),
 
 
     ]

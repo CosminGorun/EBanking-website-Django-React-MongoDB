@@ -19,7 +19,7 @@ dbUser = "DB_User"
 
 def mainPage(request,context=None):
     mongo=MongoDBConnect()
-    tabel=DataBaseTabel(mongo.get_tabel("test1","ai"))
+    # tabel=DataBaseTabel(mongo.get_tabel("test1","ai"))
     tabelTr = DataBaseTabel(mongo.get_tabel(dbTr, tabelaTr))
     tabelCont = DataBaseTabel(mongo.get_tabel("DB_User", "conturi"))
     tabelUser = DataBaseTabel(mongo.get_tabel(dbUser, tabelaUser))

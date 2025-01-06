@@ -13,14 +13,14 @@ const EmailVerificationPassw = ({ mail }) => {
     e.preventDefault();
 
     try {
-        const response = await axios.post('/mailVerification', { codVerificare: codVerificare });
+        const response = await axios.post('/mailVerificationPass', { codVerificare: codVerificare });
         setSuccess('Verification successful!');
         setError('');
         localStorage.setItem('autentificat', 1);
-        navigate('/');
+        navigate('/changePassword');
     } 
      catch (error) {
-      setError('An error occurred. Please try again.');
+      setError('The code is incorrect. Please try again.');
     }
   };
 
