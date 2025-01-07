@@ -34,6 +34,35 @@ def gasesteCurs(ibanSursa,ibanDestinatie):
     cursSursa=gasesteValutaIban(ibanSursa)
     cursDestinatie=gasesteValutaIban(ibanDestinatie)
     return convValutar(cursSursa,cursDestinatie)
+class Account:
+    def __init__(self,moneda):
+        self.moneda=moneda
+    def conversieValutara(self,toAccount):
+        return convValutar(self.moneda,toAccount.moneda)
+class AccountRON(Account):
+    def __init__(self):
+        super().__init__("RON")
+class AccountEUR(Account):
+    def __init__(self):
+        super().__init__("EUR")
+class AccountHUF(Account):
+    def __init__(self):
+        super().__init__("HUF")
+class AccountUSD(Account):
+    def __init__(self):
+        super().__init__("USD")
+
+class AccountFactory:
+    @staticmethod
+    def createAccount(initialeTara):
+        if initialeTara == "RO":
+            return AccountRON()
+        elif initialeTara == "EU":
+            return AccountEUR()
+        elif initialeTara == "HU":
+            return AccountHUF()
+        else:
+            return AccountUSD()
 
 @csrf_exempt
 def transferConturi(request):
@@ -140,7 +169,10 @@ def finalizareTransfer(request):
         cont2=cont.copy()
         transfer2=transfer.copy()
         # contTrimite2["sold"]=str(float(contTrimite["sold"])-suma)
-        cursVal = gasesteCurs(transfer["IBANtrimite"], transfer["IBANprimeste"])
+        factoryAcc=AccountFactory()
+        contSender=factoryAcc.createAccount(transfer["IBANtrimite"][:2])
+        contReceiver = factoryAcc.createAccount(transfer["IBANprimeste"][:2])
+        cursVal = contSender.conversieValutara(contReceiver)
         cont2['sold']=str(float(cont['sold'])+cursVal*suma)
         transfer2["finalizat"]=1
         tabelCont.updateOne(cont,cont2)
