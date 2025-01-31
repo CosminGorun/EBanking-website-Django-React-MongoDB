@@ -16,7 +16,7 @@ class MongoDBConnect:
 
     @staticmethod
     def _connect() -> Optional[MongoClient]:
-        uri = "mongodb+srv://cosmingorun69:12345678910@test1.evshv.mongodb.net/?retryWrites=true&w=majority&appName=test1"
+        uri = "mongodb+srv://Username:Password@DBname.evshv.mongodb.net/?retryWrites=true&w=majority&appName=DBname" #se genereaza automat in aplicatia mongodb
         client = MongoClient(uri, server_api=ServerApi('1'))
         try:
             client.admin.command('ping')

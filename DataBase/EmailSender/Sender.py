@@ -5,8 +5,8 @@ from email.message import EmailMessage
 
 class EmailSender:
     def __init__(self):
-        self.email_sender='gorun.cosmin003@gmail.com'
-        self.email_password='ikhw jker pbkl omvi'
+        self.email_sender='<EMAIL>'
+        self.email_password='<PASSWORD>'
 
     def sendMail(self,receiver,subject,body):
 

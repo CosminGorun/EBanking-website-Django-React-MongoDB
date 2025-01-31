@@ -3,9 +3,9 @@ import ssl
 from email.message import EmailMessage
 # from lib2to3.fixes.fix_input import context
 
-email_sender='gorun.cosmin003@gmail.com'
-email_to='cosmingorun69@gmail.com'
-email_password='ikhw jker pbkl omvi'
+email_sender='<EMAIL>'
+email_to='<EMAIL>'
+email_password='<PASSWORD>'
 
 subject='test'
 body="mesaj"
